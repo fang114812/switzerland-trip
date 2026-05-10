@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="瑞士之旅">
+<title>瑞士10日｜玩樂369</title>
+
+
+<style>
+:root{--snow:#f8f6f2;--alpine:#1a2744;--glacier:#4a7fa5;--peak:#c8a96e;--moss:#5a7a5a;--accent:#d4543a;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',serif;background:var(--alpine);color:var(--snow);min-height:100vh;overflow-x:hidden;}
+.itinerary,.checklist,.tips,.info{background:var(--alpine);}
+.day-card,.day-content,.day-body{background:var(--alpine);}
+
+/* HERO */
+.hero{position:relative;height:290px;background:linear-gradient(170deg,#0d1829 0%,#1a2744 45%,#2a4a6e 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:0 20px 22px;}
+.hero::before{content:'';position:absolute;bottom:0;left:0;right:0;height:160px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 160'%3E%3Cpath d='M0,160 L0,100 L40,60 L70,90 L100,30 L140,80 L170,20 L210,70 L240,10 L280,65 L310,35 L350,75 L380,45 L400,60 L400,160Z' fill='%23f8f6f2' opacity='0.07'/%3E%3C/svg%3E") no-repeat bottom;background-size:cover;}
+.star-field{position:absolute;inset:0;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle 3s infinite alternate;}
+@keyframes twinkle{from{opacity:.2}to{opacity:.9}}
+.hero-badge{font-family:'Georgia','Times New Roman',serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--peak);margin-bottom:6px;}
+.hero-title{font-family:'Georgia','Times New Roman',serif;font-size:32px;font-weight:600;line-height:1.1;color:var(--snow);}
+.hero-date{margin-top:8px;font-size:14px;color:var(--peak);letter-spacing:2px;font-weight:600;}
+.hero-sub{margin-top:3px;font-size:12px;color:rgba(248,246,242,.55);letter-spacing:1px;}
+.hero-tags{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.hero-tag{font-size:10px;padding:3px 10px;border:1px solid rgba(200,169,110,.5);border-radius:20px;color:var(--peak);letter-spacing:1px;}
+.countdown{margin-top:10px;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);padding:6px 14px;border-radius:20px;font-size:12px;color:var(--snow);}
+.countdown-num{font-family:'Georgia','Times New Roman',serif;font-size:20px;color:var(--peak);font-weight:700;line-height:1;}
+
+/* NAV */
+.nav{display:flex;background:#111c32;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:100;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex:none;padding:14px 16px;font-family:'PingFang TC','Heiti TC','Microsoft JhengHei',serif;font-size:12px;color:rgba(248,246,242,.45);background:none;border:none;cursor:pointer;white-space:nowrap;letter-spacing:1px;transition:color .2s;position:relative;}
+.nav-btn.active{color:var(--peak);}
+.nav-btn.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:var(--peak);border-radius:2px 2px 0 0;}
+
+/* SECTIONS */
+.section{display:none;}.section.active{display:block;}
+
+/* ITINERARY */
+.itinerary{padding:0 0 100px;}
+.day-card{border-bottom:1px solid rgba(255,255,255,.07);overflow:hidden;}
+.day-header{display:flex;align-items:center;padding:14px 20px;cursor:pointer;background:transparent;transition:background .2s;user-select:none;-webkit-user-select:none;}
+.day-header:active{background:rgba(255,255,255,.04);}
+.today-header{background:rgba(200,169,110,.08);}
+.day-left{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0;}
+.day-num{font-family:'Georgia','Times New Roman',serif;font-size:26px;font-weight:600;color:var(--peak);line-height:1;}
+.day-date-label{font-size:9px;color:rgba(248,246,242,.4);letter-spacing:.5px;margin-top:2px;white-space:nowrap;}
+.today-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;margin-top:3px;}
+.day-info{flex:1;padding:0 12px;}
+.day-title{font-size:14px;font-weight:600;color:var(--snow);line-height:1.3;}
+.day-meta{font-size:11px;color:rgba(248,246,242,.45);margin-top:3px;letter-spacing:.5px;}
+.today-badge{display:inline-block;font-size:9px;background:var(--accent);color:white;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle;}
+.day-arrow{font-size:12px;color:rgba(248,246,242,.3);transition:transform .3s;flex-shrink:0;}
+.day-card.open .day-arrow{transform:rotate(90deg);}
+.day-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.day-card.open .day-body{max-height:3000px;}
+.day-content{padding:0 20px 20px 72px;}
+
+/* STOPS */
+.stop{position:relative;padding:0 0 16px 20px;}
+.stop::before{content:'';position:absolute;left:5px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--glacier);}
+.stop::after{content:'';position:absolute;left:7px;top:14px;bottom:0;width:2px;background:rgba(74,127,165,.25);}
+.stop:last-child::after{display:none;}
+.stop-name{font-size:13px;font-weight:600;color:var(--snow);line-height:1.3;}
+.stop-desc{font-size:12px;color:rgba(248,246,242,.55);margin-top:3px;line-height:1.5;}
+.stop-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;letter-spacing:.5px;}
+.badge-train{background:rgba(74,127,165,.25);color:#7ab5d9;}
+.badge-peak{background:rgba(200,169,110,.2);color:var(--peak);}
+.badge-food{background:rgba(212,84,58,.2);color:#e88a72;}
+.badge-tip{background:rgba(255,255,255,.1);color:rgba(248,246,242,.6);}
+.map-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(74,127,165,.2);border:1px solid rgba(74,127,165,.4);border-radius:12px;font-size:10px;color:#7ab5d9;cursor:pointer;text-decoration:none;letter-spacing:.5px;transition:background .2s;}
+.map-btn:active{background:rgba(74,127,165,.4);}
+.spot-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);border-radius:12px;font-size:10px;color:var(--peak);cursor:pointer;letter-spacing:.5px;}
+.spot-btn:active{background:rgba(200,169,110,.3);}
+.hotel-box{margin-top:12px;padding:10px 14px;background:rgba(255,255,255,.05);border-radius:10px;border-left:3px solid var(--moss);display:flex;align-items:flex-start;gap:10px;}
+.hotel-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.hotel-label{font-size:10px;color:#8ab98a;letter-spacing:1px;margin-bottom:2px;}
+.hotel-name{font-size:13px;color:var(--snow);font-weight:600;}
+.hotel-place{font-size:11px;color:rgba(248,246,242,.45);margin-top:1px;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#1a2744;width:100%;max-width:480px;border-radius:20px 20px 0 0;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;animation:slideUp .3s ease;position:relative;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:40px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:12px auto 0;flex-shrink:0;}
+.modal-close{position:absolute;top:10px;right:14px;background:rgba(255,255,255,.12);border:none;color:var(--snow);width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.modal-scroll{overflow-y:auto;flex:1;padding:16px 20px 40px;}
+.modal-emoji{font-size:64px;text-align:center;margin-bottom:16px;line-height:1;}
+.modal-title{font-family:'Georgia','Times New Roman',serif;font-size:24px;font-weight:600;color:var(--snow);line-height:1.2;}
+.modal-en{font-size:12px;color:rgba(248,246,242,.4);margin-top:3px;letter-spacing:1px;}
+.modal-tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.modal-tag{font-size:10px;padding:3px 10px;background:rgba(255,255,255,.08);border-radius:10px;color:rgba(248,246,242,.6);}
+.modal-sec{margin-top:18px;}
+.modal-sec-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--peak);margin-bottom:8px;}
+.modal-desc{font-size:13px;color:rgba(248,246,242,.75);line-height:1.8;}
+.modal-facts{list-style:none;}
+.modal-facts li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:10px;font-size:13px;}
+.modal-facts li:last-child{border:none;}
+.fact-k{color:rgba(248,246,242,.4);flex-shrink:0;width:64px;font-size:12px;}
+.fact-v{color:var(--snow);flex:1;}
+.modal-nav-btn{display:block;margin-top:16px;padding:13px;text-align:center;background:var(--glacier);border-radius:12px;color:white;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:1px;}
+/* Photo Slider */
+.photo-slider{position:relative;width:calc(100% + 40px);margin:-16px -20px 0;height:220px;overflow:hidden;background:linear-gradient(135deg,#1a3a5e,#0d1829);}
+.photo-track{display:flex;height:100%;transition:transform .35s ease;will-change:transform;}
+.photo-slide{min-width:100%;height:100%;position:relative;flex-shrink:0;}
+.photo-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-slide-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(135deg,#1a3a5e,#0d1829);}
+.photo-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,45,.9) 0%,rgba(10,20,45,.2) 50%,transparent 100%);}
+.photo-title{position:absolute;bottom:12px;left:16px;right:50px;font-family:'Georgia',serif;font-size:20px;font-weight:700;color:white;text-shadow:0 2px 8px rgba(0,0,0,.6);line-height:1.2;}
+.photo-counter{position:absolute;bottom:15px;right:14px;font-size:11px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);padding:3px 8px;border-radius:10px;}
+.photo-prev,.photo-next{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;background:rgba(0,0,0,.45);border:none;color:white;font-size:16px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.photo-prev{left:10px;}
+.photo-next{right:10px;}
+.photo-dots{position:absolute;bottom:40px;left:0;right:0;display:flex;justify-content:center;gap:5px;}
+.photo-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4);transition:all .2s;}
+.photo-dot.active{background:white;width:14px;border-radius:3px;}
+.photo-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,20,45,.6);}
+.photo-loading-spin{width:28px;height:28px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--glacier);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-body-content{padding:16px 0 0;}
+
+/* CHECKLIST */
+.checklist{padding:20px 20px 100px;}
+.check-section{margin-bottom:28px;}
+.check-section-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--peak);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(200,169,110,.2);}
+.check-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;user-select:none;-webkit-user-select:none;}
+.check-box{width:22px;height:22px;border:2px solid rgba(248,246,242,.25);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.check-item.done .check-box{background:var(--glacier);border-color:var(--glacier);}
+.check-item.done .check-box::after{content:'✓';font-size:13px;color:white;font-weight:700;}
+.check-label{font-size:14px;color:var(--snow);flex:1;line-height:1.3;}
+.check-item.done .check-label{color:rgba(248,246,242,.3);text-decoration:line-through;}
+
+/* TIPS */
+.tips{padding:20px 20px 100px;}
+.tip-card{background:rgba(255,255,255,.05);border-radius:14px;padding:18px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08);}
+.tip-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.tip-icon{font-size:22px;}
+.tip-title{font-size:14px;font-weight:700;color:var(--peak);}
+.tip-body{font-size:13px;color:rgba(248,246,242,.7);line-height:1.7;}
+.tip-list{list-style:none;}
+.tip-list li{padding:5px 0 5px 14px;position:relative;font-size:13px;color:rgba(248,246,242,.7);line-height:1.5;}
+.tip-list li::before{content:'·';position:absolute;left:0;color:var(--glacier);font-size:18px;line-height:1;top:4px;}
+
+/* INFO */
+.info{padding:20px 20px 100px;}
+.info-card{background:rgba(255,255,255,.05);border-radius:14px;padding:18px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08);}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.info-row:last-child{border:none;}
+.info-key{font-size:12px;color:rgba(248,246,242,.45);flex-shrink:0;margin-right:12px;}
+.info-val{font-size:13px;color:var(--snow);text-align:right;line-height:1.4;}
+.sec-heading{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--peak);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(200,169,110,.2);}
+
+/* FLIGHT CARD */
+.flight-card{margin-top:12px;background:rgba(10,20,45,0.7);border:1px solid rgba(74,127,165,.35);border-radius:14px;overflow:hidden;}
+.flight-card-header{display:flex;align-items:center;gap:8px;padding:9px 14px;background:rgba(74,127,165,.15);border-bottom:1px solid rgba(74,127,165,.2);}
+.flight-airline{font-size:11px;font-weight:700;color:#7ab5d9;letter-spacing:1px;}
+.flight-num{font-size:11px;color:var(--peak);font-weight:700;margin-left:auto;font-family:'Georgia','Times New Roman',serif;letter-spacing:1px;}
+.flight-body{padding:12px 14px;}
+.flight-row{display:flex;align-items:center;gap:0;justify-content:space-between;}
+.flight-airport{flex:1;}
+.flight-time{font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:600;color:var(--snow);line-height:1;}
+.flight-city{font-size:10px;color:rgba(248,246,242,.45);margin-top:2px;letter-spacing:.5px;}
+.flight-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.flight-line{display:flex;align-items:center;width:100%;gap:4px;}
+.flight-dot{width:6px;height:6px;border-radius:50%;background:var(--glacier);flex-shrink:0;}
+.flight-dash{flex:1;height:1px;background:linear-gradient(90deg,var(--glacier),rgba(74,127,165,.3));}
+.flight-plane{font-size:14px;}
+.flight-dur{font-size:10px;color:rgba(248,246,242,.4);letter-spacing:.5px;}
+.flight-right{text-align:right;}
+.flight-date-badge{display:inline-block;font-size:9px;background:rgba(200,169,110,.2);color:var(--peak);padding:2px 7px;border-radius:8px;margin-top:3px;letter-spacing:.5px;}
+
+/* SCROLL TOP */
+.scroll-top{position:fixed;bottom:24px;right:20px;width:44px;height:44px;background:var(--glacier);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 20px rgba(0,0,0,.4);cursor:pointer;opacity:0;transition:opacity .3s;z-index:200;border:none;color:white;}
+.scroll-top.visible{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="star-field" id="stars"></div>
+  <div class="hero-badge">雄獅旅遊 · 26EC611EKA</div>
+  <div class="hero-title">瑞士經典<br>十日之旅</div>
+  <div class="hero-date">2026年 6月4日 — 6月13日</div>
+  <div class="hero-sub">少女峰 · 馬特宏峰 · 白朗峰</div>
+  <div class="hero-tags">
+    <div class="hero-tag">冰河列車</div>
+    <div class="hero-tag">黃金列車</div>
+    <div class="hero-tag">伯連納列車</div>
+    <div class="hero-tag">夏季版</div>
+  </div>
+  <div class="countdown">出發倒數 <span class="countdown-num" id="cdNum">-</span> 天</div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="switchTab('itinerary',this)">每日行程</button>
+  <button class="nav-btn" onclick="switchTab('checklist',this)">待辦清單</button>
+  <button class="nav-btn" onclick="switchTab('tips',this)">旅遊提示</button>
+  <button class="nav-btn" onclick="switchTab('info',this)">行程資訊</button>
+</nav>
+
+<div class="section active" id="itinerary"><div class="itinerary" id="itineraryList"></div></div>
+<div class="section" id="checklist"><div class="checklist"><div class="check-section"><div class="check-section-title">出發前準備</div><div id="checklistItems"></div></div><div class="check-section"><div class="check-section-title">行李打包</div><div id="packItems"></div></div></div></div>
+<div class="section" id="tips"><div class="tips" id="tipsContent"></div></div>
+<div class="section" id="info"><div class="info" id="infoContent"></div></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-scroll" id="modalScroll"></div>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── COUNTDOWN ──
+const tripStart = new Date('2026-06-04T00:00:00');
+const tripEnd   = new Date('2026-06-13T23:59:59');
+const now = new Date();
+const cdEl = document.getElementById('cdNum');
+const diffDays = Math.ceil((tripStart - now) / 86400000);
+if (diffDays > 0) cdEl.textContent = diffDays;
+else if (now <= tripEnd) cdEl.textContent = '旅途中 ✈️';
+else cdEl.textContent = '已結束';
+
+// Today's day index
+const todayIdx = (() => {
+  for (let i = 0; i < 10; i++) {
+    const d = new Date(tripStart); d.setDate(d.getDate() + i);
+    if (d.toDateString() === now.toDateString()) return i;
+  }
+  return -1;
+})();
+
+// ── SPOTS DATABASE ──
+const spots = {
+  kapellbruecke:{
+    emoji:'🌉',name:'卡貝爾橋',en:'Kapellbrücke, Luzern',
+    tags:['14世紀木橋','盧森地標','免費參觀'],
+    desc:'卡貝爾橋是歐洲最古老的有頂木橋，建於1333年，橫跨羅伊斯河全長約200公尺。橋上懸掛著110幅繪於17世紀的三角形木板畫，描述瑞士與盧森歷史。橋旁的八角形水塔曾是珠寶庫與瞭望台。1993年遭大火燒毀部分橋身，修復後新舊痕跡清晰可辨，是盧森必訪的攝影聖地。',
+    facts:[['建造','1333年'],['長度','約200公尺'],['木板畫','110幅（17世紀）'],['票價','免費'],['位置','盧森市中心河畔']],
+    amap:'https://maps.apple.com/?q=Kapellbrücke&ll=47.0515,8.3074&z=17',
+    gmap:'https://maps.google.com/?q=47.0515,8.3074'
+  },
+  lionmonument:{
+    emoji:'🦁',name:'沈睡的石獅',en:'Lion Monument, Luzern',
+    tags:['感人歷史','世界著名雕刻','免費'],
+    desc:'這座刻於砂岩岩壁的垂死石獅，是為紀念1792年法國大革命中守護路易十六而犧牲的瑞士傭兵。馬克·吐溫曾讚美為「世界上最哀傷、最感人的石雕」。石獅身中長矛、懷抱法國王室盾牌，旁刻有瑞士盾徽，是盧森最具歷史情感的景點之一。',
+    facts:[['完成年份','1821年'],['材質','砂岩岩壁雕鑿'],['大小','約9公尺長'],['票價','免費'],['位置','盧森北部公園']],
+    amap:'https://maps.apple.com/?q=Lion+Monument+Luzern&ll=47.0583,8.3108&z=17',
+    gmap:'https://maps.google.com/?q=47.0583,8.3108'
+  },
+  jungfraujoch:{
+    emoji:'🏔',name:'少女峰頂站',en:'Jungfraujoch – Top of Europe',
+    tags:['海拔3454m','歐洲最高車站','UNESCO冰河'],
+    desc:'少女峰頂站「歐洲之巔」是歐洲海拔最高的鐵路車站（3,454公尺）。搭乘登山火車穿越艾格峰岩洞隧道可到達，頂站設有冰宮（在冰川內雕鑿的隧道與雕像）、斯芬克斯瞭望台（可360°俯瞰阿爾卑斯群峰）、以及壯闊的阿雷奇冰河（UNESCO世界自然遺產）。6月氣溫約0至-5°C，厚外套與手套為必備。',
+    facts:[['海拔','3,454公尺'],['氣溫（6月）','約0°C至-5°C'],['冰河','阿雷奇冰河（UNESCO）'],['穿著','厚外套+手套+防曬'],['登頂時間','約2.5小時（含換車）']],
+    amap:'https://maps.apple.com/?q=Jungfraujoch&ll=46.5473,7.9854&z=14',
+    gmap:'https://maps.google.com/?q=46.5473,7.9854'
+  },
+  matterhorn:{
+    emoji:'⛰',name:'馬特宏峰',en:'Matterhorn, Zermatt',
+    tags:['4478m','山中之王','三角巧克力原型'],
+    desc:'馬特宏峰（4,478公尺）是阿爾卑斯山脈最具代表性的山峰，獨特的錐形輪廓舉世聞名，正是瑞士三角巧克力包裝圖案的原型。從策馬特搭乘高納葛拉特登山鐵路可抵達3,089公尺觀景站，馬特宏峰壯麗地矗立眼前。清晨第一道陽光灑在山頂的玫瑰色光芒，是攝影師夢寐以求的「牛奶糖時刻」。',
+    facts:[['海拔','4,478公尺'],['觀景點','高納葛拉特3,089m'],['最佳時刻','日出玫瑰光（早晨5–6點）'],['策馬特','禁燃油車小鎮'],['6月溫度','策馬特約10–18°C']],
+    amap:'https://maps.apple.com/?q=Matterhorn&ll=45.9766,7.6586&z=13',
+    gmap:'https://maps.google.com/?q=45.9766,7.6586'
+  },
+  glacierExpress:{
+    emoji:'🚂',name:'冰河列車',en:'Glacier Express',
+    tags:['世界著名景觀列車','291座橋','91條隧道'],
+    desc:'冰河列車是全球最著名的全景觀火車之一，號稱「世界上速度最慢的特快車」。從庫爾（Chur）至策馬特（Zermatt），全程8小時穿越291座橋樑、91條隧道，翻越海拔2,033公尺的奧伯阿爾普山口。頭等艙弧形大景觀窗讓旅客坐在舒適座位上盡覽冰河、峽谷、瀑布美景，並提供精緻車廂餐飲服務。',
+    facts:[['本程路線','庫爾→布里格'],['全程時間','約8小時'],['最高山口','2,033m（奧伯阿爾普）'],['座艙','頭等艙全景觀窗'],['特色','車廂內用餐服務']],
+    amap:'https://maps.apple.com/?q=Chur+Train+Station&ll=46.8534,9.5305&z=14',
+    gmap:'https://maps.google.com/?q=46.8534,9.5305'
+  },
+  montblanc:{
+    emoji:'🌨',name:'白朗峰',en:'Mont Blanc, Chamonix',
+    tags:['4808m','歐洲最高峰','法瑞義三國交界'],
+    desc:'白朗峰（4,808公尺）是西歐最高峰，矗立法義瑞三國交界。在法國夏蒙尼搭乘「艾居依·杜·米迪」纜車（全球最高懸空纜車之一）上升至3,842公尺觀景台，可360°俯瞰白朗峰冰川群與阿爾卑斯壯闊山景。頂台溫度可達-15°C，需穿著極地裝備。6月白雪覆蓋的山頂在藍天下格外震撼。',
+    facts:[['海拔','4,808公尺'],['纜車終點','艾居依·杜·米迪3,842m'],['纜車時間','約20分鐘'],['頂台氣溫','約-10至-15°C'],['穿著','極地厚外套必備']],
+    amap:'https://maps.apple.com/?q=Aiguille+du+Midi+Chamonix&ll=45.8791,6.8873&z=14',
+    gmap:'https://maps.google.com/?q=45.8791,6.8873'
+  },
+  berninaExpress:{
+    emoji:'🚞',name:'伯連納快車',en:'Bernina Express',
+    tags:['UNESCO世界遺產','最高無齒軌鐵路','冰河奇景'],
+    desc:'伯連納快車是全球海拔最高的鐵路之一，整條路線被列入UNESCO世界文化遺產（2008年）。列車翻越伯連納山口（2,253公尺），全程無齒軌登高坡，工程奇蹟令人讚嘆。沿途景色從白雪冰川驟變為義大利南歐棕櫚風情，短短數小時穿越兩種截然不同的自然與文化風貌，是世界最特別的鐵路旅程之一。',
+    facts:[['路線','庫爾→提拉諾（義大利）'],['最高點','伯連納山口2,253m'],['UNESCO列入','2008年'],['特色','無齒軌登高坡'],['全程時間','約4小時']],
+    amap:'https://maps.apple.com/?q=Bernina+Pass&ll=46.4103,10.0256&z=13',
+    gmap:'https://maps.google.com/?q=46.4103,10.0256'
+  },
+  stmoritz:{
+    emoji:'💎',name:'聖莫里茲',en:'St. Moritz',
+    tags:['全球頂級度假地','奧運城市','恩加丁湖光'],
+    desc:'聖莫里茲是世界最著名的山地度假勝地之一，以奢華、雪場與壯麗山景聞名全球。小鎮坐落恩加丁山谷，海拔1,856公尺，翡翠色高山湖泊倒映白雪山峰，美不勝收。聖莫里茲曾兩度舉辦冬季奧運（1928、1948年）。6月積雪漸退，高山草甸開始盛放野花，是健行與湖畔漫步的絕佳時節。',
+    facts:[['海拔','1,856公尺'],['知名','兩屆冬奧舉辦地'],['特色','恩加丁高山湖泊'],['6月活動','健行、湖畔漫步'],['交通','伯連納快車停靠站']],
+    amap:'https://maps.apple.com/?q=St.+Moritz+Switzerland&ll=46.4980,9.8407&z=14',
+    gmap:'https://maps.google.com/?q=46.4980,9.8407'
+  },
+  zurich:{
+    emoji:'🏙',name:'蘇黎世',en:'Zürich',
+    tags:['瑞士最大城','全球購物天堂','利馬特河畔'],
+    desc:'蘇黎世是瑞士最大城市，也是全球重要金融中心。班霍夫大街（Bahnhofstrasse）全長1.4公里，集結頂級鐘錶、精品與巧克力店；舊城區（Altstadt）保留中世紀石板小巷與彩繪建築；利馬特河畔的大教堂（Grossmünster）建於12世紀，登頂可俯瞰全城。蘇黎世連年被評選為全球生活品質最高的城市之一。',
+    facts:[['人口','約44萬（市區）'],['班霍夫大街','全長1.4公里'],['大教堂','12世紀羅馬式'],['退稅','購物退稅CHF300起'],['生活指數','全球最貴城市之一']],
+    amap:'https://maps.apple.com/?q=Zürich+Bahnhofstrasse&ll=47.3740,8.5368&z=15',
+    gmap:'https://maps.google.com/?q=47.3740,8.5368'
+  },
+  luzern:{
+    emoji:'🌊',name:'盧森',en:'Luzern',
+    tags:['湖畔古城','中世紀壁畫','購物天堂'],
+    desc:'盧森是瑞士中部最迷人的城市，坐落於盧森湖畔，四周阿爾卑斯山環抱。舊城區石板路兩旁有無數鐘錶店、巧克力店與紀念品店，廣場噴泉與色彩繽紛的中世紀壁畫是城市特色。夜晚湖光山色倒映，是瑞士最浪漫的城市之一。從盧森可輕鬆前往皮拉圖斯山與立基山乘纜車體驗山景。',
+    facts:[['地理','盧森湖畔，海拔435m'],['特色','鐘錶、巧克力購物'],['地標','卡貝爾橋、沈睡石獅'],['周邊','皮拉圖斯山纜車'],['交通','瑞士國鐵直達']],
+    amap:'https://maps.apple.com/?q=Luzern+Old+Town&ll=47.0502,8.3093&z=15',
+    gmap:'https://maps.google.com/?q=47.0502,8.3093'
+  },
+  zermatt:{
+    emoji:'🏘',name:'策馬特',en:'Zermatt',
+    tags:['無污染小鎮','馬特宏峰玄關','登山健行天堂'],
+    desc:'策馬特是全球最著名的山地度假小鎮，禁止燃油車進入，空氣清新純淨。以馬特宏峰為背景的街景舉世聞名，小鎮精緻的石板路上有頂級登山裝備店、起司鍋餐廳、手工巧克力工坊。高納葛拉特登山鐵路可近距離欣賞馬特宏峰。6月積雪漸退，高山花海盛放，是健行旺季之始。',
+    facts:[['海拔','1,620公尺'],['禁燃油車','全鎮電動車與馬車'],['登山鐵路','高納葛拉特至3,089m'],['6月','高山花海開始盛放'],['健行','超過400km步道']],
+    amap:'https://maps.apple.com/?q=Zermatt+Switzerland&ll=46.0207,7.7491&z=14',
+    gmap:'https://maps.google.com/?q=46.0207,7.7491'
+  },
+};
+
+// ── DAYS ──
+const dates=['6/4 四','6/5 五','6/6 六','6/7 日','6/8 一','6/9 二','6/10 三','6/11 四','6/12 五','6/13 六'];
+const days=[
+  {day:1,date:dates[0],title:'出發・桃園→杜拜→蘇黎世',route:'桃園機場 → 杜拜轉機 → 蘇黎世',hotel:'機上（含轉機）',hotelCity:'飛行中',stops:[
+    {name:'桃園國際機場 第一航廈集合',desc:'提前3小時抵達辦理報到，確認護照、登機證與行李托運',badges:['tip'],amap:'https://maps.apple.com/?q=Taiwan+Taoyuan+Airport&ll=25.0777,121.2328&z=14',gmap:'https://maps.google.com/?q=25.0777,121.2328',flight:{airline:'阿聯酋航空 Emirates',num:'EK 367',dep:'23:05',depLabel:'桃園機場',arr:'04:35',arrLabel:'杜拜機場',depDate:'6/4（四）',arrDate:'6/5（五）',dur:'約 9h 30m'}},
+    {name:'杜拜機場轉機',desc:'杜拜轉機約4小時，可在免稅區休息購物，留意登機廣播',badges:['tip'],amap:'https://maps.apple.com/?q=Dubai+International+Airport&ll=25.2532,55.3657&z=14',gmap:'https://maps.google.com/?q=25.2532,55.3657',flight:{airline:'阿聯酋航空 Emirates',num:'EK 087',dep:'08:40',depLabel:'杜拜機場',arr:'13:20',arrLabel:'蘇黎世機場',depDate:'6/5（五）',arrDate:'6/5（五）',dur:'約 6h 40m'}},
+  ]},
+  {day:2,date:dates[1],title:'抵達蘇黎世・盧森古城',route:'蘇黎世機場 → 盧森',hotel:'盧森周邊飯店',hotelCity:'盧森',stops:[
+    {name:'抵達蘇黎世機場',desc:'入境瑞士，領取行李，換匯瑞士法郎（CHF）',badges:['tip'],amap:'https://maps.apple.com/?q=Zurich+Airport&ll=47.4506,8.5617&z=14',gmap:'https://maps.google.com/?q=47.4506,8.5617'},
+    {name:'盧森舊城區',desc:'石板小路、中世紀壁畫，購物天堂',badges:['peak'],spot:'luzern',amap:'https://maps.apple.com/?q=Luzern+Old+Town&ll=47.0502,8.3093&z=15',gmap:'https://maps.google.com/?q=47.0502,8.3093'},
+    {name:'卡貝爾橋 Kapellbrücke',desc:'歐洲最古老有頂木橋（1333年），橋上彩繪17世紀木板畫',badges:['peak'],spot:'kapellbruecke',amap:'https://maps.apple.com/?q=Kapellbrücke+Luzern&ll=47.0515,8.3074&z=17',gmap:'https://maps.google.com/?q=47.0515,8.3074'},
+    {name:'沈睡的石獅 Lion Monument',desc:'馬克吐溫讚為「世界上最哀傷、最感人的石雕」',badges:['peak'],spot:'lionmonument',amap:'https://maps.apple.com/?q=Lion+Monument+Luzern&ll=47.0583,8.3108&z=17',gmap:'https://maps.google.com/?q=47.0583,8.3108'},
+  ]},
+  {day:3,date:dates[2],title:'歐洲之巔・少女峰',route:'因特拉肯 → 少女峰頂站（3454m）',hotel:'因特拉肯周邊飯店',hotelCity:'因特拉肯',stops:[
+    {name:'搭登山火車上少女峰',desc:'穿越艾格北壁岩洞隧道，直達歐洲最高火車站',badges:['train','peak'],spot:'jungfraujoch',amap:'https://maps.apple.com/?q=Jungfraujoch&ll=46.5473,7.9854&z=14',gmap:'https://maps.google.com/?q=46.5473,7.9854'},
+    {name:'冰宮・斯芬克斯瞭望台',desc:'在萬年冰川內漫步，360°俯瞰阿雷奇冰河壯觀全景',badges:['peak'],spot:'jungfraujoch',amap:'https://maps.apple.com/?q=Jungfraujoch&ll=46.5473,7.9854&z=14',gmap:'https://maps.google.com/?q=46.5473,7.9854'},
+    {name:'因特拉肯自由活動',desc:'圖恩湖與布里恩茨湖之間的美麗小鎮，散步購物',badges:['tip'],amap:'https://maps.apple.com/?q=Interlaken&ll=46.6863,7.8632&z=14',gmap:'https://maps.google.com/?q=46.6863,7.8632'},
+  ]},
+  {day:4,date:dates[3],title:'黃金列車・策馬特',route:'因特拉肯 → 策馬特',hotel:'策馬特飯店',hotelCity:'策馬特（無污染小鎮）',stops:[
+    {name:'搭乘黃金列車 Golden Pass',desc:'全景觀車廂，沿途盧森湖翠綠山谷，頭等艙愜意享受',badges:['train','peak'],amap:'https://maps.apple.com/?q=Interlaken+Ost+Station&ll=46.6891,7.8690&z=15',gmap:'https://maps.google.com/?q=46.6891,7.8690'},
+    {name:'抵達策馬特 Zermatt',desc:'瑞士最著名無污染小鎮，禁止燃油車，電動車與馬車代步',badges:['peak'],spot:'zermatt',amap:'https://maps.apple.com/?q=Zermatt&ll=46.0207,7.7491&z=14',gmap:'https://maps.google.com/?q=46.0207,7.7491'},
+    {name:'黃昏眺望馬特宏峰',desc:'傍晚在廣場或飯店露台欣賞馬特宏峰的金色夕陽',badges:['peak'],spot:'matterhorn',amap:'https://maps.apple.com/?q=Matterhorn&ll=45.9766,7.6586&z=13',gmap:'https://maps.google.com/?q=45.9766,7.6586'},
+  ]},
+  {day:5,date:dates[4],title:'山中之王・馬特宏峰',route:'策馬特 周邊',hotel:'策馬特飯店',hotelCity:'策馬特',stops:[
+    {name:'高納葛拉特登山鐵路 Gornergrat',desc:'登山火車至3,089公尺，馬特宏峰就近在眼前',badges:['train','peak'],spot:'matterhorn',amap:'https://maps.apple.com/?q=Gornergrat+Zermatt&ll=45.9838,7.7857&z=14',gmap:'https://maps.google.com/?q=45.9838,7.7857'},
+    {name:'馬特宏峰觀景台',desc:'4,478公尺「山中之王」，三角巧克力包裝原型',badges:['peak'],spot:'matterhorn',amap:'https://maps.apple.com/?q=Matterhorn&ll=45.9766,7.6586&z=13',gmap:'https://maps.google.com/?q=45.9766,7.6586'},
+    {name:'策馬特小鎮漫步',desc:'登山裝備店、起司鍋餐廳、手工巧克力工坊',badges:['food','tip'],spot:'zermatt',amap:'https://maps.apple.com/?q=Zermatt+Center&ll=46.0207,7.7491&z=15',gmap:'https://maps.google.com/?q=46.0207,7.7491'},
+  ]},
+  {day:6,date:dates[5],title:'冰河列車全景之旅',route:'庫爾 → 布里格（全程8小時）',hotel:'格勞賓登州周邊',hotelCity:'格勞賓登州',stops:[
+    {name:'前往庫爾搭車',desc:'搭乘瑞士國鐵前往格勞賓登州首府庫爾',badges:['train'],amap:'https://maps.apple.com/?q=Chur+Station&ll=46.8534,9.5305&z=14',gmap:'https://maps.google.com/?q=46.8534,9.5305'},
+    {name:'搭乘冰河列車 Glacier Express',desc:'翻越291座橋、91條隧道，世界最著名全景觀火車',badges:['train','peak'],spot:'glacierExpress',amap:'https://maps.apple.com/?q=Glacier+Express+Oberalp+Pass&ll=46.6560,8.6720&z=12',gmap:'https://maps.google.com/?q=46.6560,8.6720'},
+    {name:'車廂內精緻午餐',desc:'在移動的阿爾卑斯美景中享用列車餐飲，人生難忘體驗',badges:['food']},
+  ]},
+  {day:7,date:dates[6],title:'白朗峰・夏蒙尼',route:'布里格 → 法國夏蒙尼',hotel:'夏蒙尼/日內瓦周邊',hotelCity:'法國夏蒙尼',stops:[
+    {name:'前往法國夏蒙尼 Chamonix',desc:'跨越瑞法邊境，抵達阿爾卑斯登山運動聖地',badges:['tip'],amap:'https://maps.apple.com/?q=Chamonix+France&ll=45.9237,6.8694&z=13',gmap:'https://maps.google.com/?q=45.9237,6.8694'},
+    {name:'艾居依·杜·米迪纜車',desc:'全球最高懸空纜車之一，攀升至3,842公尺俯瞰冰川',badges:['peak'],spot:'montblanc',amap:'https://maps.apple.com/?q=Aiguille+du+Midi&ll=45.8791,6.8873&z=14',gmap:'https://maps.google.com/?q=45.8791,6.8873'},
+    {name:'白朗峰觀景台',desc:'俯瞰4,808公尺歐洲最高峰，法義瑞三國壯闊雪景',badges:['peak'],spot:'montblanc',amap:'https://maps.apple.com/?q=Mont+Blanc&ll=45.8326,6.8652&z=13',gmap:'https://maps.google.com/?q=45.8326,6.8652'},
+  ]},
+  {day:8,date:dates[7],title:'伯連納列車・聖莫里茲',route:'庫爾 → 提拉諾（UNESCO世遺路線）',hotel:'格勞賓登州周邊',hotelCity:'格勞賓登州',stops:[
+    {name:'搭乘伯連納快車 Bernina Express',desc:'UNESCO世界遺產列車，無齒軌翻越2,253m山口，工程奇蹟',badges:['train','peak'],spot:'berninaExpress',amap:'https://maps.apple.com/?q=Bernina+Pass&ll=46.4103,10.0256&z=13',gmap:'https://maps.google.com/?q=46.4103,10.0256'},
+    {name:'聖莫里茲 St. Moritz',desc:'全球頂級度假勝地，恩加丁高山湖泊翡翠色倒影',badges:['peak'],spot:'stmoritz',amap:'https://maps.apple.com/?q=St+Moritz&ll=46.4980,9.8407&z=14',gmap:'https://maps.google.com/?q=46.4980,9.8407'},
+    {name:'Alp Grüm 觀景站',desc:'伯連納路線最美觀景點，冰川與湖泊絕美倒影',badges:['peak'],amap:'https://maps.apple.com/?q=Alp+Grüm&ll=46.3869,10.0539&z=14',gmap:'https://maps.google.com/?q=46.3869,10.0539'},
+  ]},
+  {day:9,date:dates[8],title:'蘇黎世・自由購物',route:'返回蘇黎世',hotel:'蘇黎世機場附近',hotelCity:'蘇黎世',stops:[
+    {name:'搭國鐵返回蘇黎世',desc:'最後一段瑞士鐵路風光',badges:['train'],amap:'https://maps.apple.com/?q=Zurich+HB&ll=47.3775,8.5404&z=15',gmap:'https://maps.google.com/?q=47.3775,8.5404'},
+    {name:'班霍夫大街 Bahnhofstrasse',desc:'全球最奢華購物街，頂級錶店、精品、巧克力雲集',badges:['tip'],spot:'zurich',amap:'https://maps.apple.com/?q=Bahnhofstrasse+Zurich&ll=47.3740,8.5368&z=15',gmap:'https://maps.google.com/?q=47.3740,8.5368'},
+    {name:'蘇黎世舊城區 Altstadt',desc:'利馬特河畔、大教堂、古老石板巷弄，拍照留念',badges:['peak'],spot:'zurich',amap:'https://maps.apple.com/?q=Zürich+Altstadt&ll=47.3733,8.5417&z=15',gmap:'https://maps.google.com/?q=47.3733,8.5417'},
+    {name:'瑞士傳統告別晚宴',desc:'正宗起司鍋（Fondue）或烤起司（Raclette）作為美好句點',badges:['food']},
+  ]},
+  {day:10,date:dates[9],title:'返台・蘇黎世→桃園',route:'蘇黎世機場 → 台灣桃園機場',hotel:'溫暖的家 🏠',hotelCity:'台灣',stops:[
+    {name:'前往蘇黎世機場辦理退稅',desc:'提早3小時抵達機場，辦理Global Blue退稅（CHF300以上）、完成安檢',badges:['tip'],amap:'https://maps.apple.com/?q=Zurich+Airport&ll=47.4506,8.5617&z=14',gmap:'https://maps.google.com/?q=47.4506,8.5617',flight:{airline:'阿聯酋航空 Emirates',num:'EK 088',dep:'15:25',depLabel:'蘇黎世機場',arr:'23:45',arrLabel:'杜拜機場',depDate:'6/13（六）',arrDate:'6/13（六）',dur:'約 6h 20m'}},
+    {name:'杜拜機場轉機',desc:'轉機後搭乘返台班機，帶著滿滿感動踏上歸途！',badges:['tip'],amap:'https://maps.apple.com/?q=Dubai+International+Airport&ll=25.2532,55.3657&z=14',gmap:'https://maps.google.com/?q=25.2532,55.3657',flight:{airline:'阿聯酋航空 Emirates',num:'EK 366',dep:'03:45',depLabel:'杜拜機場',arr:'16:00',arrLabel:'桃園機場',depDate:'6/14（日）',arrDate:'6/14（日）',dur:'約 8h 15m'}},
+    {name:'抵達台灣桃園機場',desc:'回程：2026/06/13（六）✅  瑞士十日之旅圓滿落幕，阿爾卑斯的壯麗永留心中 ❤️',badges:['tip'],amap:'https://maps.apple.com/?q=Taiwan+Taoyuan+Airport&ll=25.0777,121.2328&z=14',gmap:'https://maps.google.com/?q=25.0777,121.2328'},
+  ]},
+];
+
+const badgeMap={train:{cls:'badge-train',text:'🚂 列車'},peak:{cls:'badge-peak',text:'⛰ 景點'},food:{cls:'badge-food',text:'🍽 美食'},tip:{cls:'badge-tip',text:'💡 提示'}};
+
+// Build itinerary
+const listEl=document.getElementById('itineraryList');
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+
+days.forEach((d,i)=>{
+  const isToday=i===todayIdx;
+  const card=document.createElement('div');
+  card.className='day-card'+(isToday?' open':'');
+  card.innerHTML=`
+    <div class="day-header${isToday?' today-header':''}" onclick="toggleDay(this)">
+      <div class="day-left">
+        <div class="day-num">${String(d.day).padStart(2,'0')}</div>
+        <div class="day-date-label">${d.date}</div>
+        ${isToday?'<div class="today-dot"></div>':''}
+      </div>
+      <div class="day-info">
+        <div class="day-title">${d.title}${isToday?'<span class="today-badge">今天</span>':''}</div>
+        <div class="day-meta">${d.route}</div>
+      </div>
+      <div class="day-arrow">▶</div>
+    </div>
+    <div class="day-body">
+      <div class="day-content">
+        ${d.stops.map(s=>`
+          <div class="stop">
+            <div class="stop-name">${s.name}</div>
+            <div class="stop-desc">${s.desc}</div>
+            <div class="stop-actions">
+              ${(s.badges||[]).map(b=>`<span class="badge ${badgeMap[b].cls}">${badgeMap[b].text}</span>`).join('')}
+              ${(s.amap||s.gmap)?`<a class="map-btn" href="${isIOS?(s.amap||s.gmap):(s.gmap||s.amap)}" target="_blank">📍 地圖導航</a>`:''}
+              ${s.spot?`<span class="spot-btn" onclick="openSpot('${s.spot}')">ℹ️ 景點介紹</span>`:''}
+            </div>
+            ${s.flight?`
+            <div class="flight-card">
+              <div class="flight-card-header">
+                <span style="font-size:16px">✈️</span>
+                <span class="flight-airline">${s.flight.airline}</span>
+                <span class="flight-num">${s.flight.num}</span>
+              </div>
+              <div class="flight-body">
+                <div class="flight-row">
+                  <div class="flight-airport">
+                    <div class="flight-time">${s.flight.dep}</div>
+                    <div class="flight-city">${s.flight.depLabel}</div>
+                    <div class="flight-date-badge">${s.flight.depDate}</div>
+                  </div>
+                  <div class="flight-mid">
+                    <div class="flight-line">
+                      <div class="flight-dot"></div>
+                      <div class="flight-dash"></div>
+                      <div class="flight-plane">✈</div>
+                      <div class="flight-dash" style="background:linear-gradient(90deg,rgba(74,127,165,.3),var(--glacier))"></div>
+                      <div class="flight-dot"></div>
+                    </div>
+                    <div class="flight-dur">${s.flight.dur}</div>
+                  </div>
+                  <div class="flight-airport flight-right">
+                    <div class="flight-time">${s.flight.arr}</div>
+                    <div class="flight-city">${s.flight.arrLabel}</div>
+                    <div class="flight-date-badge">${s.flight.arrDate}</div>
+                  </div>
+                </div>
+              </div>
+            </div>`:''}
+          </div>
+        `).join('')}
+        <div class="hotel-box">
+          <div class="hotel-icon">🏨</div>
+          <div>
+            <div class="hotel-label">今晚住宿</div>
+            <div class="hotel-name">${d.hotel}</div>
+            <div class="hotel-place">${d.hotelCity}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  listEl.appendChild(card);
+});
+
+function toggleDay(h){h.parentElement.classList.toggle('open');}
+
+// ── SPOT MODAL ──
+// 景點照片 — Wikimedia Commons Special:FilePath（瀏覽器端永遠可用）
+// referrerpolicy="no-referrer" 已設在 img 標籤，確保不被 hotlink 擋住
+const spotPhotos={
+  kapellbruecke:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Kapellbrücke_und_Wasserturm_vom_Bürkliplatz.jpg?width=800',c:'卡貝爾橋與水塔'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Kapellbrücke_Nacht.jpg?width=800',c:'夜晚的卡貝爾橋'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Luzern_von_oben.jpg?width=800',c:'盧森全景俯瞰'},
+  ],
+  lionmonument:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Dying_Lion_closeup_Luzern.jpg?width=800',c:'垂死的石獅'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Lion_Monument_Luzern.jpg?width=800',c:'石獅紀念碑全景'},
+  ],
+  jungfraujoch:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Jungfraujoch-mit-Blick-auf-Aletschgletscher.jpg?width=800',c:'阿雷奇冰河全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Sphinx_Jungfraujoch_2012.jpg?width=800',c:'斯芬克斯瞭望台'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Jungfrau_from_Männlichen.jpg?width=800',c:'少女峰遠景'},
+  ],
+  matterhorn:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Matterhorn_from_Domhütte_-_2.jpg?width=800',c:'馬特宏峰壯麗全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Matterhorn_Riffelsee_2005-06-11.jpg?width=800',c:'里菲爾湖倒影'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Zermatt_-_panoramio.jpg?width=800',c:'策馬特小鎮'},
+  ],
+  glacierExpress:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Glacier_Express_in_Rheinwald.jpg?width=800',c:'冰河列車穿越山谷'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Landwasserviadukt.jpg?width=800',c:'蘭德瓦塞高架橋'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Oberalppass_Eisenbahn.jpg?width=800',c:'奧伯阿爾普山口'},
+  ],
+  montblanc:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Mont_Blanc_desde_Chamonix.JPG?width=800',c:'白朗峰壯麗全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Aiguille_du_Midi_and_Mont_Blanc.jpg?width=800',c:'艾居依纜車站'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Chamonix_village.jpg?width=800',c:'夏蒙尼小鎮'},
+  ],
+  berninaExpress:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Bernina_Express_Brusio.jpg?width=800',c:'布魯奇歐螺旋橋'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Lago_Bianco_Bernina.jpg?width=800',c:'伯連納白湖'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Alp_Grüm_Panorama.jpg?width=800',c:'Alp Grüm觀景站'},
+  ],
+  stmoritz:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Sankt_Moritz_-_panoramio.jpg?width=800',c:'聖莫里茲全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/St_Moritz_lake_summer.jpg?width=800',c:'聖莫里茲湖夏景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Engadin_Oberengadin_Panorama.jpg?width=800',c:'恩加丁山谷'},
+  ],
+  zurich:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Zurich_CBD_from_Lindenhügel.jpg?width=800',c:'蘇黎世城市全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Grossmünster_Zürich.jpg?width=800',c:'格羅斯明斯特大教堂'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Bahnhofstrasse_Zürich_2014.jpg?width=800',c:'班霍夫大街'},
+  ],
+  luzern:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Luzern_Kapellbruecke.jpg?width=800',c:'卡貝爾橋'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Vierwaldstättersee_Luzern.jpg?width=800',c:'盧森湖全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Lucerne_-_panoramio.jpg?width=800',c:'盧森舊城區'},
+  ],
+  zermatt:[
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Zermatt_-_panoramio_(29).jpg?width=800',c:'策馬特小鎮全景'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Matterhorn_from_Zermatt.jpg?width=800',c:'從策馬特看馬特宏峰'},
+    {u:'https://commons.wikimedia.org/wiki/Special:FilePath/Zermatt_bei_Nacht.jpg?width=800',c:'策馬特夜景'},
+  ],
+};
+
+function fetchWikiImages(key){
+  var photos = spotPhotos[key] || [];
+  return Promise.resolve(photos.map(function(p){ return {url:p.u, caption:p.c}; }));
+}
+
+
+function openSpot(key){
+  var s=spots[key];
+  if(!s) return;
+  var navUrl=isIOS?s.amap:s.gmap;
+  var scroll=document.getElementById('modalScroll');
+
+  // Build facts
+  var factsHTML='';
+  s.facts.forEach(function(f){ factsHTML+='<li><span class="fact-k">'+f[0]+'</span><span class="fact-v">'+f[1]+'</span></li>'; });
+
+  // Build tags
+  var tagsHTML='';
+  s.tags.forEach(function(t){ tagsHTML+='<span class="modal-tag">'+t+'</span>'; });
+
+  // Initial render with loading spinner
+  var html='';
+  html+='<div class="photo-slider" id="pslider">';
+  html+='  <div class="photo-track" id="ptrack">';
+  html+='    <div class="photo-slide"><div class="photo-slide-placeholder">'+s.emoji+'</div></div>';
+  html+='  </div>';
+  html+='  <div class="photo-gradient"></div>';
+  html+='  <div class="photo-title" id="ptitle">'+s.name+'</div>';
+  html+='  <div class="photo-counter" id="pcounter">載入中...</div>';
+  html+='  <div class="photo-loading"><div class="photo-loading-spin"></div></div>';
+  html+='  <div class="photo-dots" id="pdots"></div>';
+  html+='</div>';
+  html+='<div class="modal-body-content">';
+  html+='<div class="modal-title">'+s.name+'</div>';
+  html+='<div class="modal-en">'+s.en+'</div>';
+  html+='<div class="modal-tags">'+tagsHTML+'</div>';
+  html+='<div class="modal-sec"><div class="modal-sec-title">景點介紹</div><div class="modal-desc">'+s.desc+'</div></div>';
+  html+='<div class="modal-sec"><div class="modal-sec-title">基本資訊</div><ul class="modal-facts">'+factsHTML+'</ul></div>';
+  html+='<a class="modal-nav-btn" href="'+navUrl+'" target="_blank">📍 開啟地圖導航</a>';
+  html+='</div>';
+
+  scroll.innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  // Fetch real photos
+  fetchWikiImages(key).then(function(photos){
+    var slider=document.getElementById('pslider');
+    var track=document.getElementById('ptrack');
+    var dotsEl=document.getElementById('pdots');
+    var counter=document.getElementById('pcounter');
+    if(!slider) return;
+
+    // Remove loading spinner
+    var loading=slider.querySelector('.photo-loading');
+    if(loading) loading.remove();
+
+    if(!photos || photos.length===0){
+      // Keep emoji placeholder
+      counter.textContent='';
+      return;
+    }
+
+    // Build slides
+    var currentIdx=0;
+    track.innerHTML='';
+    photos.forEach(function(p,i){
+      var slide=document.createElement('div');
+      slide.className='photo-slide';
+      var img=document.createElement('img');img.setAttribute('referrerpolicy','no-referrer');
+      img.src=p.url;
+      img.alt=p.caption;
+      img.onerror=function(){
+        slide.innerHTML='<div class="photo-slide-placeholder">'+s.emoji+'</div>';
+      };
+      slide.appendChild(img);
+      track.appendChild(slide);
+    });
+
+    // Build dots
+    dotsEl.innerHTML='';
+    if(photos.length>1){
+      photos.forEach(function(p,i){
+        var dot=document.createElement('div');
+        dot.className='photo-dot'+(i===0?' active':'');
+        dot.onclick=function(){goTo(i);};
+        dotsEl.appendChild(dot);
+      });
+      // Add prev/next buttons
+      var prev=document.createElement('button');
+      prev.className='photo-prev';
+      prev.innerHTML='&#8249;';
+      prev.onclick=function(){goTo(currentIdx-1);};
+      slider.appendChild(prev);
+      var next=document.createElement('button');
+      next.className='photo-next';
+      next.innerHTML='&#8250;';
+      next.onclick=function(){goTo(currentIdx+1);};
+      slider.appendChild(next);
+    }
+
+    updateCounter();
+
+    function goTo(idx){
+      currentIdx=(idx+photos.length)%photos.length;
+      track.style.transform='translateX(-'+currentIdx+'00%)';
+      document.getElementById('ptitle').textContent=photos[currentIdx].caption;
+      updateCounter();
+      var dots=dotsEl.querySelectorAll('.photo-dot');
+      dots.forEach(function(d,i){ d.className='photo-dot'+(i===currentIdx?' active':''); });
+    }
+
+    function updateCounter(){
+      var c=document.getElementById('pcounter');
+      if(c) c.textContent=photos.length>1?(currentIdx+1)+' / '+photos.length:'';
+      var t=document.getElementById('ptitle');
+      if(t) t.textContent=photos[currentIdx].caption;
+    }
+
+    // Touch swipe support
+    var startX=0;
+    track.addEventListener('touchstart',function(e){ startX=e.touches[0].clientX; },{passive:true});
+    track.addEventListener('touchend',function(e){
+      var dx=e.changedTouches[0].clientX-startX;
+      if(Math.abs(dx)>40){ goTo(dx<0?currentIdx+1:currentIdx-1); }
+    },{passive:true});
+
+    goTo(0);
+  });
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function bgClose(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+// ── CHECKLIST ──
+function buildChecklist(items,cid){
+  const el=document.getElementById(cid);
+  const key='chk_'+cid;
+  let saved=[];try{saved=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
+  if(saved.length===items.length)items.forEach((it,i)=>it.done=saved[i]);
+  items.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='check-item'+(item.done?' done':'');
+    div.innerHTML=`<div class="check-box"></div><div class="check-label">${item.label}</div>`;
+    div.onclick=()=>{item.done=!item.done;div.classList.toggle('done');try{localStorage.setItem(key,JSON.stringify(items.map(i=>i.done)));}catch(e){}};
+    el.appendChild(div);
+  });
+}
+buildChecklist([
+  {label:'護照有效期超過6個月',done:false},
+  {label:'台灣護照申根免簽確認',done:false},
+  {label:'申辦旅遊平安保險',done:false},
+  {label:'下載離線地圖（Google Maps瑞士）',done:false},
+  {label:'兌換瑞士法郎（CHF）',done:false},
+  {label:'通知銀行信用卡出國使用',done:false},
+  {label:'確認機票電子票',done:false},
+  {label:'確認出發日期：2026/6/4 集合時間與航廈',done:false},
+  {label:'雄獅旅遊APP下載',done:false},
+  {label:'輸入緊急聯絡人資料',done:false},
+],'checklistItems');
+buildChecklist([
+  {label:'厚外套（少女峰頂0°C以下）',done:false},
+  {label:'防水登山鞋（必備！）',done:false},
+  {label:'防曬乳 SPF50+（高山紫外線超強）',done:false},
+  {label:'太陽眼鏡',done:false},
+  {label:'保暖手套與薄毛帽',done:false},
+  {label:'輕便雨衣或折疊傘',done:false},
+  {label:'萬用插頭（F型歐規插頭）',done:false},
+  {label:'行動電源',done:false},
+  {label:'高山症藥（備用）',done:false},
+  {label:'護照影本（備份放行李）',done:false},
+],'packItems');
+
+// ── TIPS ──
+[
+  {icon:'📅',title:'6月瑞士天氣',list:['平地城市（盧森、蘇黎世）：15–25°C，舒適宜人','少女峰頂：0至-5°C，厚外套+手套必備','策馬特/馬特宏峰：10–18°C，日夜溫差大','白朗峰觀景台：-10至-15°C，極地裝備必備','6月偶有午後雷陣雨，輕便雨衣隨身帶']},
+  {icon:'🚂',title:'景觀列車訂位注意',body:'冰河列車、伯連納列車座位有限。雄獅已協助預訂頭等艙，若遇滿席或維修將退費並安排替代方案。景觀列車每年有不定期維修，出發前建議確認最新狀況。'},
+  {icon:'💰',title:'貨幣與消費',list:['瑞士法郎（CHF）1元≈台幣約38–40元','礦泉水CHF 3–5，咖啡CHF 4–6，午餐CHF 20–40','大城市信用卡普及，小鎮建議備現金','購物退稅門檻CHF 300，留好收據辦Global Blue','機場免稅店價格反而不一定便宜，市區酌情購物']},
+  {icon:'📱',title:'通訊上網',list:['建議在台購買歐洲漫遊SIM卡或WiFi分享器','瑞士4G/5G覆蓋佳，山區隧道內無訊號','Google Maps離線地圖建議提前下載（瑞士+法國）','WhatsApp是歐洲常用通訊工具']},
+  {icon:'🍽',title:'6月飲食推薦',list:['起司鍋（Fondue）：策馬特或盧森必吃','烤起司（Raclette）：熱融起司配小馬鈴薯','6月草莓季，超市新鮮草莓特別甜美','超市Migros/Coop：便宜三明治、優格、零食','頂峰餐廳（少女峰/高納葛拉特）景觀無敵，但價格偏高']},
+  {icon:'🏥',title:'健康與安全',list:['高山症：頭痛噁心是正常反應，緩慢適應、多喝水','少女峰登頂前勿劇烈運動；若不適請立即下山','旅遊保險必備，瑞士急診費用極其高昂','緊急電話：警察117、救護車144、消防118','瑞士治安極佳，但人潮密集處仍注意隨身財物']},
+].forEach(t=>{
+  const card=document.createElement('div');
+  card.className='tip-card';
+  card.innerHTML=`<div class="tip-card-header"><div class="tip-icon">${t.icon}</div><div class="tip-title">${t.title}</div></div>${t.body?`<div class="tip-body">${t.body}</div>`:''}${t.list?`<ul class="tip-list">${t.list.map(l=>`<li>${l}</li>`).join('')}</ul>`:''}`;
+  document.getElementById('tipsContent').appendChild(card);
+});
+
+// ── INFO ──
+document.getElementById('infoContent').innerHTML=`
+  <p class="sec-heading">行程基本資訊</p>
+  <div class="info-card">${[['行程名稱','玩樂369經典瑞士旅遊'],['行程代號','26EC611EKA-T'],['出發日期','2026年6月4日（四）23:05'],['返台日期','2026年6月13日（六）'],['天數','10天7夜'],['季節','夏季版']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val">${v}</div></div>`).join('')}</div>
+  <p class="sec-heading" style="margin-top:24px">✈️ 航班資訊</p>
+  <div class="info-card">
+    <div style="font-size:10px;color:var(--glacier);letter-spacing:2px;margin-bottom:10px;text-transform:uppercase">去程</div>
+    ${[['航空公司','阿聯酋航空 Emirates'],['去程 ①','EK367｜6/4（四）23:05 桃園 → 6/5（五）04:35 杜拜'],['飛行時間①','約 9 小時 30 分鐘'],['去程 ②','EK087｜6/5（五）08:40 杜拜 → 6/5（五）13:20 蘇黎世'],['飛行時間②','約 6 小時 40 分鐘']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val">${v}</div></div>`).join('')}
+    <div style="font-size:10px;color:var(--glacier);letter-spacing:2px;margin:14px 0 10px;text-transform:uppercase">回程</div>
+    ${[['回程 ①','EK088｜6/13（六）15:25 蘇黎世 → 6/13（六）23:45 杜拜'],['飛行時間①','約 6 小時 20 分鐘'],['回程 ②','EK366｜6/14（日）03:45 杜拜 → 6/14（日）16:00 桃園'],['飛行時間②','約 8 小時 15 分鐘']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val">${v}</div></div>`).join('')}
+  </div>
+  <p class="sec-heading" style="margin-top:24px">行程亮點</p>
+  <div class="info-card">${[['三大名峰','少女峰・馬特宏峰・白朗峰'],['三大列車','冰河・黃金・伯連納（頭等艙）'],['最高車站','少女峰頂站 3,454m'],['世界遺產','伯連納列車路線（UNESCO）'],['特色小鎮','盧森・策馬特・聖莫里茲'],['跨國','含法國夏蒙尼']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val">${v}</div></div>`).join('')}</div>
+  <p class="sec-heading" style="margin-top:24px">費用包含</p>
+  <div class="info-card">${[['機票','國際線來回經濟艙＋稅費'],['住宿','行程內7晚飯店'],['餐食','行程內指定餐食'],['交通','景觀列車頭等艙＋專車'],['保險','責任險200萬＋醫療20萬']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val">${v}</div></div>`).join('')}</div>
+  <p class="sec-heading" style="margin-top:24px">緊急聯絡</p>
+  <div class="info-card">${[['雄獅旅遊','0800-200-898'],['瑞士警察','117'],['瑞士救護車','144'],['瑞士消防','118'],['台灣駐瑞代表處','+41-31-382-2927']].map(([k,v])=>`<div class="info-row"><div class="info-key">${k}</div><div class="info-val" style="color:var(--glacier)">${v}</div></div>`).join('')}</div>
+`;
+
+// ── TAB ──
+function switchTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+
+// ── STARS ──
+const sf=document.getElementById('stars');
+for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+1;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*70}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s;`;sf.appendChild(s);}
+
+// ── SCROLL TOP ──
+const stBtn=document.getElementById('scrollTop');
+window.addEventListener('scroll',()=>stBtn.classList.toggle('visible',window.scrollY>200));
+</script>
+</body>
+</html>
